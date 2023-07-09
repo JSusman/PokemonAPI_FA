@@ -131,6 +131,32 @@ namespace PokemonReviewApp.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{catagoryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCatagory(int catagoryId)
+        {
+            if (!_catagoryRepository.CatagoryExists(catagoryId))
+            {
+                return NotFound();
+            }
+
+            var catagoryToDelete = _catagoryRepository.GetCatagory(catagoryId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_catagoryRepository.DeleteCatagory(catagoryToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleteing catagory");
+            }
+
+            return NoContent();
+        }
+
+
+
 
     }
 }
